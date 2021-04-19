@@ -63,3 +63,38 @@ h1{
     padding: 10px;
     font-size: 70px;
 }
+table {
+    margin: auto;
+  
+}
+table tr th ,td:first-child{
+    background-color:#FEB062 ;
+    color:#FEB062;
+    padding: 8px 10px;
+    box-shadow:
+    inset 0 0 50px #fff,      /* inner white */
+    inset 20px 0 80px #FEB062,   /* inner left magenta short */
+    inset -20px 0 80px #FEB062,  /* inner right cyan short */
+    inset 20px 0 300px #FEB062,  /* inner left magenta broad */
+    inset -20px 0 300px #FEB062, /* inner right cyan broad */
+    0 0 50px #fff,            /* outer white */
+    -10px 0 80px #FEB062,        /* outer left magenta */
+    10px 0 80px #FEB062;         /* outer right cyan */
+}
+table td{
+    padding: 8px 10px;
+    border-collapse: collapse;
+    border: 1px solid #FEB062;
+}
+table tfoot{
+    box-shadow:
+    inset 0 0 50px #575151,      /* inner white */
+    inset 20px 0 80px #FEB062,   /* inner left magenta short */
+    inset -20px 0 80px #FEB062,  /* inner right cyan short */
+    inset 20px 0 300px #FEB062,  /* inner left magenta broad */
+    inset -20px 0 300px #FEB062, /* inner right cyan broad */
+    0 0 50px #575151,            /* outer white */
+    -10px 0 80px #FEB062,        /* outer left magenta */
+    10px 0 80px #575151;         /* outer right cyan */
+    color:#fff;
+}
