@@ -3,6 +3,12 @@
 const mainElement = document.getElementById('sales');
 const table = document.createElement('table');
 mainElement.appendChild(table);
+let cityForm=document.getElementById('location-form');
+
+let tfoot =document.createElement('tfoot');
+let trow=document.createElement('tr');
+let tfooter=document.createElement('th');
+let totalColumn=0;
 //craet constructor 
 function Location(name,minCustomers,maxCustomers,averageCookies){
     this.name=name;
@@ -10,8 +16,11 @@ function Location(name,minCustomers,maxCustomers,averageCookies){
     this.maxCustomers=maxCustomers;
     this.averageCookies=averageCookies;
     this.resultArr=[0];
+    this.total=0;
+    Location.allLocation.push(this);
 
 }
+Location.allLocation=[];
 Location.prototype.numberCustomersPerHour= function (){
     
     return getRandomNumber(this.minCustomers, this.maxCustomers);
@@ -20,6 +29,7 @@ Location.prototype.getResultArr = function (){
     for (let i = 0 ;i<14 ;i++){
         this.resultArr[i]=Math.floor(this.numberCustomersPerHour()*this.averageCookies);
         //console.log(this.resultArr[i]);
+        this.total+=this.resultArr[i];
     }
 };
 Location.prototype.render=function(){
@@ -30,15 +40,13 @@ Location.prototype.render=function(){
     let td=document.createElement('td');
     td.textContent=this.name;
     row.appendChild(td);
-    let total=0;
     for (let i=0;i<14;i++){
         td=document.createElement('td');
         td.textContent=this.resultArr[i];
-        total+=this.resultArr[i];
         row.appendChild(td);
     }
     td=document.createElement('td');
-    td.textContent=total;
+    td.textContent=this.total;
     row.appendChild(td);
     table.appendChild(row);
 
@@ -63,29 +71,35 @@ function createHederTable(){
 }
 //create footer for table
 function createFooterTable(){
-    const tfooter =document.createElement('tfoot');
-    const trow=document.createElement('tr');
+     tfoot =document.createElement('tfoot');
+     trow=document.createElement('tr');
     
-    let td=document.createElement('td');
-    td.textContent=' / ';
+    let td=document.createElement('th');
+    td.textContent='Total';
     trow.appendChild(td);
-    
-    for (let i =2 ;i <17 ; i++){
-        let element=document.querySelectorAll('tr td:nth-child('+i+')');
-        let totalColumn=0;
-        for(let r =0 ;r<element.length;r++){
+    let allTotal=0;
+    for (let i =0 ;i <14 ; i++){
+        //let element=document.querySelectorAll('tr td:nth-child('+i+')');
+         totalColumn=0;
+        for(let r =0 ;r<Location.allLocation.length;r++){
            // console.log(element[r].textContent);
-            totalColumn+=parseInt(element[r].textContent);
+           // totalColumn+=parseInt(element[r].textContent);
+           totalColumn+=Location.allLocation[r].resultArr[i];
+           allTotal+=Location.allLocation[r].resultArr[i];
             
         }
-        //console.log(totalColumn);
-        td=document.createElement('td');
-        td.textContent=totalColumn;
-        trow.appendChild(td);
+        console.log(totalColumn);
+        tfooter=document.createElement('td');
+        tfooter.textContent=totalColumn;
+        trow.appendChild(tfooter);
+
 
     }
-    tfooter.appendChild(trow);
-    return tfooter;
+    tfooter=document.createElement('th');
+    tfooter.textContent=allTotal;
+    trow.appendChild(tfooter);
+    tfoot.appendChild(trow);
+    return tfoot;
    
 }
 let trHeader=createHederTable();
@@ -106,9 +120,26 @@ Paris.render();
 let Lima=new Location('Lima',2,16,4.6);
 Lima.render();
 
+//form 
+
+cityForm.addEventListener('submit',function(event){
+    event.preventDefault();
+    console.log(event.target.cityName.value);
+    const name=event.target.cityName.value;
+    const min = event.target.min.value;
+    const max =event.target.max.value;
+    const avg=event.target.avrg.value;
+    let newLocation = new Location(name,min,max,avg);
+    newLocation.render();
+    
+    table.removeChild(foot);
+    foot =createFooterTable();
+    table.appendChild(foot);
+});
+
 //footer of table 
-let tfooter =createFooterTable();
-table.appendChild(tfooter);
+let foot =createFooterTable();
+table.appendChild(foot);
 
 //Create random number
 function getRandomNumber(min, max) {
